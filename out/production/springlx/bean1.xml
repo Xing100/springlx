@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--    配置User对象创建-->
+    <bean id = "user" class="guigu.User"></bean>
+
+<!--    set方法注入属性-->
+    <bean id = "book" class="guigu.Book">
+        <!--使用property完成属性注入
+            name：类里面属性名称
+            value：向属性注入的值-->
+<!--        null值-->
+        <property name="name" >
+            <null/>
+        </property>
+        <property name="price" value="15"></property>
+
+    </bean>
+
+
+<!--    有参数构造器注入属性-->
+    <bean id="order" class="guigu.Orders">
+        <constructor-arg name="name" value="xing"></constructor-arg>
+        <constructor-arg name="address" value="heishan"></constructor-arg>
+    </bean>
+
+<!--    service和dao对象创建-->
+    <bean id="userService" class="service.UserService">
+        <!--注入UserDao对象
+            name属性：类里面属性名称
+            ref属性：创建UserDao对象bean标签id值-->
+        <property name="userDao" ref="userDaoimpl"></property>
+    </bean>
+    <bean id="userDaoimpl" class="dao.UserDaoimpl"></bean>
+
+<!--    内部bean-->
+    <bean id="emp" class="bean.Emp">
+<!--        设置两个普通属性-->
+        <property name="name" value="xing"></property>
+        <property name="gender" value="男"></property>
+<!--        设置对象类型属性-->
+        <property name="dept">
+            <bean id="dept" class="bean.Dept">
+                <property name="name" value="安保部"></property>
+            </bean>
+        </property>
+
+    </bean>
+<!--&lt;!&ndash;    级联赋值&ndash;&gt;-->
+<!--    <bean id="emp" class="bean.Emp">-->
+<!--        &lt;!&ndash;        设置两个普通属性&ndash;&gt;-->
+<!--        <property name="name" value="xing"></property>-->
+<!--        <property name="gender" value="男"></property>-->
+<!--        &lt;!&ndash;        级联赋值&ndash;&gt;-->
+<!--        <property name="dept" ref="dept"></property>-->
+<!--    </bean>-->
+<!--    <bean id="dept" class="bean.Dept">-->
+<!--        <property name="name" value="安保部"></property>-->
+<!--    </bean>-->
+
+<!--    集合类型属性注入-->
+    <bean id="stu" class="collectiontype.Stu">
+<!--        数组类型注入-->
+        <property name="arrays">
+            <array>
+                <value>邢</value>
+                <value>治</value>
+                <value>山</value>
+            </array>
+<!--            map类型注入-->
+        </property>
+        <property name="maps">
+            <map>
+                <entry key="xing" value="jiang"></entry>
+                <entry key="y" value="y"></entry>
+            </map>
+        </property>
+
+<!--        将对象放入list中-->
+        <property name="courses">
+            <list>
+                <ref bean="c1"></ref>
+                <ref bean="c2"></ref>
+            </list>
+        </property>
+    </bean>
+    <bean id="c1" class="collectiontype.Course">
+        <property name="course" value="Java"></property>
+    </bean>
+    <bean id="c2" class="collectiontype.Course">
+        <property name="course" value="PHP"></property>
+    </bean>
+
+
+<!--    实现自动装配
+        bean 标签属性autowire，配置自动装配
+        autowire属性常用两个值：
+            byName 根据属性名称注入，注入值bean的id值和类属性名称一样
+            byType 根据属性类型注入
+            -->
+    <bean id="b" class="auto.B" autowire="byName"></bean>
+    <bean id="a" class="auto.A">
+        <property name="name" value="邢治山"></property>
+    </bean>
+</beans>
